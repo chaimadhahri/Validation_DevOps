@@ -23,10 +23,11 @@ pipeline {
                 sh 'mvn sonar:sonar  -Dsonar.login=admin -Dsonar.password=sonar'
             }
         }
-	stage('NEXUS'){
-            steps{
-                sh "mvn deploy -DskipTests=true"
+	stage('JUNIT') {
+            steps {
+		sh 'mvn clean test -Dtest=tn.esprit.spring.serviceTest.CourseServicesImplTest -Dmaven.test.failure.ignore=true'     
             }
-        } 
+        }
+
     }
 }
