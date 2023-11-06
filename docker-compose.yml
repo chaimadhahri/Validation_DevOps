@@ -1,0 +1,19 @@
+version: "3.7"
+services:
+  ski-api:
+    image: ski-image
+    restart: always
+    ports:
+      - 9090:8089
+    depends_on:
+      - mysqldb
+
+  mysqldb:
+    image: "mysql:8.0"
+    restart: always
+    ports:
+      - 3306:3306
+
+    environment:
+      MYSQL_DATABASE: skiProject
+      MYSQL_ALLOW_EMPTY_PASSWORD: yes
