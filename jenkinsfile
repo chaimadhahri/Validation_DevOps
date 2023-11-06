@@ -23,9 +23,9 @@ pipeline {
                 sh 'mvn sonar:sonar  -Dsonar.login=admin -Dsonar.password=sonar'
             }
         }
-	stage('JUNIT') {
-            steps {
-		sh 'mvn test
+	stage('NEXUS'){
+            steps{
+                sh "mvn deploy -DskipTests=true"
             }
         } 
     }
