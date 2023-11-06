@@ -26,7 +26,7 @@ public class CourseServiceImplTest {
 
     @Test
     @Order(2)
-    public void testAddCourse()throws ParseException {
+    public void testAddCourse() {
         Course course = new Course(1L,2, TypeCourse.INDIVIDUAL, Support.SKI, 20f, 3);
         Course course1 = iCourseServices.addCourse(course);
         Assertions.assertEquals(course.getNumCourse(), course1.getNumCourse());
