@@ -25,7 +25,7 @@ pipeline {
         }
 	stage('JUNIT') {
             steps {
-		sh 'mvn clean test -Dtest=tn.esprit.spring.CourseServiceImplTest -Dmaven.test.failure.ignore=true'     
+		sh 'mvn clean test -Dtest=tn.esprit.spring.serviceTest.CourseServiceImplTest -Dmaven.test.failure.ignore=true'     
             }
         }  
     }
