@@ -18,15 +18,15 @@ pipeline {
                 sh 'mvn compile'
             }
         }
+	stage('Mockito') {
+            steps {
+		sh 'mvn clean test -Dtest=tn.esprit.spring.serviceTest.CourseServiceMockTest'
+              
+            }
+        }
 	stage('Maven sonar:sonar') {
             steps {
                 sh 'mvn sonar:sonar  -Dsonar.login=admin -Dsonar.password=sonar'
-            }
-        }
-	stage('Mockito') {
-            steps {
-		echo 'Mockito Test'
-                
             }
         }
 
