@@ -20,7 +20,7 @@ pipeline {
         }
 	stage('Mockito') {
             steps {
-		sh 'mvn clean test -Dtest=tn.esprit.spring.serviceTest.CourseServiceMockTest'
+		sh 'mvn test'
               
             }
         }
