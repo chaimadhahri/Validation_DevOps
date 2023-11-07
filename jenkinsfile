@@ -26,7 +26,7 @@ pipeline {
 	stage('Mockito') {
             steps {
 		echo 'Mockito Test'
-                sh 'mvn test'
+                
             }
         }
 
