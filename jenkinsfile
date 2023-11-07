@@ -8,17 +8,13 @@ pipeline {
                 git 'https://github.com/chaimadhahri/Validation_DevOps.git'
             }
         }
-        stage('Maven clean') {
+        stage('Maven clean install') {
             steps {
-                sh 'mvn clean'
+                sh 'mvn clean install'
             }
         }
-	 stage('Maven compile') {
-            steps {
-                sh 'mvn compile'
-            }
-        }
-	stage('Mockito') {
+
+	stage('Tests') {
             steps {
 		sh 'mvn test'
               
@@ -27,6 +23,12 @@ pipeline {
 	stage('Maven sonar:sonar') {
             steps {
                 sh 'mvn sonar:sonar  -Dsonar.login=admin -Dsonar.password=sonar'
+            }
+        }
+	stage('Package') {
+            steps {
+		sh 'mvn package'
+              
             }
         }
 
