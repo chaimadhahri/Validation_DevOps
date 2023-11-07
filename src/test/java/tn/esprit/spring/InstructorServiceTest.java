@@ -5,6 +5,7 @@ import org.junit.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
+import org.springframework.boot.test.context.SpringBootTest;
 import tn.esprit.spring.entities.Course;
 import tn.esprit.spring.entities.Instructor;
 import tn.esprit.spring.repositories.ICourseRepository;
@@ -17,6 +18,7 @@ import java.util.Optional;
 import static org.mockito.Mockito.*;
 import static org.junit.Assert.*;
 
+@SpringBootTest
 public class InstructorServiceTest {
     @InjectMocks
     private InstructorServicesImpl instructorService;
