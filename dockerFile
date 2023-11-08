@@ -1,4 +1,11 @@
+# Utilisez l'image de base openjdk:8
 FROM openjdk:8
+
+# Exposez le port 8090
 EXPOSE 8090
-ADD  target/khaddem-4.0.jar khaddem-4.0.jar
-ENTRYPOINT ["java" , "-jar" , "gestion-station-ski-1.0.jar" ]
+
+# Copiez le fichier JAR de votre application dans le conteneur
+COPY target/gestion-station-ski-1.0.jar gestion-station-ski-1.0.jar
+
+# Commande d'entrée pour démarrer votre application
+CMD ["java", "-jar", "gestion-station-ski-1.0.jar"]
