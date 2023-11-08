@@ -31,11 +31,11 @@ pipeline {
               
             }
         }
-	stage('NEXUS'){
+ 	stage("Docker-compose") {
             steps{
-                sh "mvn deploy -DskipTests=true"
-            }
-        } 
+                sh 'docker-compose up -d'
+                }
+        }
 
     }
 }
