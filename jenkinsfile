@@ -31,22 +31,41 @@ pipeline {
               
             }
         }
- 	stage('Build Docker Image') {
+	stage('NEXUS'){
+            steps{
+                sh "mvn deploy -DskipTests=true"
+            }
+        }
+	        stage('Build Docker Image') {
             steps {
-                script {
-                    def customImageName = 'station-ski:1.0'
-                    docker.build(customImageName, '-f Dockerfile .')
-                }
+                echo 'Building the Docker image...'
+             //   sh 'docker-compose -f /Bureau/Station ski/Validation_DevOps/docker-compose.yml build'
+               // sh 'docker build -t SkiG3:tag -f /Bureau/Station ski/Validation_DevOps/Dockerfile'
+                sh 'docker build -t chaymadhahri/ski:1.0.0 .'
+       
+
             }
         }
 
-        stage('Run Docker Compose') {
+        stage('Upload to Docker Hub') {
             steps {
-                script {
-                    sh 'docker-compose up -d'
-                }
+                echo 'Logging in to Docker Hub with a token...'
+                sh 'echo dckr_pat_pt4oRkToaQpMPezuhR-KDO1MRy4 | docker login -u chaymadhahri --password-stdin'
+
+                echo 'Pushing the Docker image to Docker Hub...'
+                sh 'docker push chaymadhahri/ski:1.0.0'
             }
         }
+       
+
+       
+        stage('Run Docker Compose') {
+            steps {
+                echo 'Running Docker Compose...'
+               // sh 'sudo docker-compose -f /home/vagrant/docker-compose.yml up -d'
+                sh 'docker-compose up -d'
+            }
+        } 
 
     }
 }
