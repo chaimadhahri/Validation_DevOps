@@ -3,15 +3,13 @@ version: "3.9"
 services:
   Validation_DevOps:
     container_name: Validation_DevOps
-    build:
-      context: .
-      dockerfile: Dockerfile
+    build: Validation_DevOps
     ports:
-      - "8090:8090"
+      - "8"
     environment:
       - SPRING_DATASOURCE_URL=jdbc:h2:mem:ski;DB_CLOSE_DELAY=-1;DB_CLOSE_ON_EXIT=FALSE
       - SPRING_DATASOURCE_USERNAME=sa
       - SPRING_DATASOURCE_PASSWORD=password
-    image: station-ski
+    image: "ski"
     command: mvn test
     restart: unless-stopped
