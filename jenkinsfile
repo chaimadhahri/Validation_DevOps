@@ -31,10 +31,21 @@ pipeline {
               
             }
         }
- 	stage("Docker-compose") {
-            steps{
-                sh 'docker-compose up -d'
+ 	stage('Build Docker Image') {
+            steps {
+                script {
+                    def customImageName = 'station-ski:1.0'
+                    docker.build(customImageName, '-f Dockerfile .')
                 }
+            }
+        }
+
+        stage('Run Docker Compose') {
+            steps {
+                script {
+                    sh 'docker-compose up -d'
+                }
+            }
         }
 
     }
