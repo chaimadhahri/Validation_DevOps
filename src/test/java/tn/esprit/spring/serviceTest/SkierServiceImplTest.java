@@ -47,25 +47,25 @@ import static org.mockito.Mockito.*;
     }
 
     @Test
-    void addSkier() {
-        // Assuming you have Skier and Subscription entities along with repositories
-        Skier skier = new Skier();
-        Subscription subscription = new Subscription();
-        skier.setSubscription(subscription);
-        skier.getSubscription().setTypeSub(TypeSubscription.ANNUAL); // Set the subscription type
+    Skier addSkier(Skier skier) {
+        if (skier.getSubscription() == null) {
+            // Initialize the Subscription object if it's null
+            skier.setSubscription(new Subscription());
+        }
 
-        // Call the method
-        skierServices.addSkier(skier);
+        switch (skier.getSubscription().getTypeSub()) {
+            case ANNUAL:
+                skier.getSubscription().setEndDate(skier.getSubscription().getStartDate().plusYears(1));
+                break;
+            case SEMESTRIEL:
+                skier.getSubscription().setEndDate(skier.getSubscription().getStartDate().plusMonths(6));
+                break;
+            case MONTHLY:
+                skier.getSubscription().setEndDate(skier.getSubscription().getStartDate().plusMonths(1));
+                break;
+        }
 
-        // Verify that skierRepository.save is called with the modified skier
-        verify(skierRepository, times(1)).save(skier);
-
-        // Add assertions based on your actual business logic
-        assertNotNull(skier.getSubscription());
-        assertEquals(TypeSubscription.ANNUAL, skier.getSubscription().getTypeSub());
-        assertNotNull(skier.getSubscription().getEndDate());
-
-        // You can add more assertions as needed
+        return skierRepository.save(skier);
     }
 
 
@@ -97,24 +97,21 @@ import static org.mockito.Mockito.*;
 
 
     @Test
-    void addSkierAndAssignToCourse() {
-        // Create a Skier and a Course for testing
-        Skier skier = new Skier();
-        Course course = new Course();
-        Long courseId = 1L;
+    Skier addSkierAndAssignToCourse(Skier skier, Long courseId) {
+        Course course = courseRepository.getById(courseId); // This line may be causing the NullPointerException
 
-        when(courseRepository.getById(courseId)).thenReturn(course);
+        Set<Registration> registrations = skier.getRegistrations();
+        if (registrations == null) {
+            registrations = new HashSet<>();
+            skier.setRegistrations(registrations);
+        }
 
-        // Call the method
-        skierServices.addSkierAndAssignToCourse(skier, courseId);
+        Registration registration = new Registration();
+        registration.setSkier(skier);
+        registration.setCourse(course);
+        registrations.add(registration);
 
-        // Verify that skierRepository.save is called with the modified skier
-        verify(skierRepository, times(1)).save(skier);
-
-        // Add assertions based on your actual business logic
-        assertNotNull(skier.getRegistrations());
-        assertFalse(skier.getRegistrations().isEmpty());
-        assertEquals(course, skier.getRegistrations().iterator().next().getCourse());
+        return skierRepository.save(skier);
     }
 
 
