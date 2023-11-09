@@ -8,14 +8,9 @@ pipeline {
                 git url: 'https://github.com/chaimadhahri/Validation_DevOps.git', branch: 'chayma'
             }
         }
-        stage('Maven clean') {
+         stage('MVN CLEAN INSTALL') {
             steps {
-                sh 'mvn clean'
-            }
-        }
-	stage('Maven compile') {
-            steps {
-                sh 'mvn compile'
+                sh 'mvn clean install'
             }
         }
 
