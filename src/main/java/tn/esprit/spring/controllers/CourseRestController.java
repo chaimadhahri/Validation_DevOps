@@ -5,10 +5,11 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 import tn.esprit.spring.entities.Course;
-import tn.esprit.spring.entities.TypeCourse;
+import tn.esprit.spring.dtos.CourseDTO;
 import tn.esprit.spring.services.ICourseServices;
 
 import java.util.List;
+
 
 @Tag(name = "\uD83D\uDCDA Course Management")
 @RestController
@@ -20,8 +21,10 @@ public class CourseRestController {
 
     @Operation(description = "Add Course")
     @PostMapping("/add")
-    public Course addCourse(@RequestBody Course course){
-        return  courseServices.addCourse(course);
+    public Course addCourse(@RequestBody CourseDTO courseDTO) {
+        Course course = new Course(courseDTO.getNumCourse(),courseDTO.getLevel(),courseDTO.getTypeCourse(),courseDTO.getSupport(),courseDTO.getPrice(),courseDTO.getTimeSlot(),null);
+
+        return courseServices.addCourse(course);
     }
 
     @Operation(description = "Retrieve all Courses")
@@ -32,8 +35,10 @@ public class CourseRestController {
 
     @Operation(description = "Update Course ")
     @PutMapping("/update")
-    public Course updateCourse(@RequestBody Course course){
-        return  courseServices.updateCourse(course);
+    public Course updateCourse(@RequestBody CourseDTO courseDTO) {
+        Course course = new Course(courseDTO.getNumCourse(),courseDTO.getLevel(),courseDTO.getTypeCourse(),courseDTO.getSupport(),courseDTO.getPrice(),courseDTO.getTimeSlot(),null);
+
+        return courseServices.updateCourse(course);
     }
 
     @Operation(description = "Retrieve Course by Id")

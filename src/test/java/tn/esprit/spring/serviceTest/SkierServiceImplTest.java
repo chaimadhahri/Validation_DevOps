@@ -22,7 +22,7 @@ import static org.mockito.ArgumentMatchers.*;
 import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
-public class SkierServiceImplTest {
+ class SkierServiceImplTest {
 
     @Mock
     private ISkierRepository skierRepository;
@@ -36,7 +36,7 @@ public class SkierServiceImplTest {
     private SkierServicesImpl skierServices;
 
     @Test //done
-    public void testRetrieveAllSkiers() {
+     void testRetrieveAllSkiers() {
         List<Skier> skierList = new ArrayList<>();
         when(skierRepository.findAll()).thenReturn(skierList);
 
@@ -47,65 +47,81 @@ public class SkierServiceImplTest {
     }
 
     @Test
-    public Skier addSkier(Skier skier) {
-        if (skier.getSubscription() == null) {
-            // Initialize the Subscription object if it's null
-            skier.setSubscription(new Subscription());
-        }
+    void addSkier() {
+        // Assuming you have Skier and Subscription entities along with repositories
+        Skier skier = new Skier();
+        Subscription subscription = new Subscription();
+        skier.setSubscription(subscription);
+        skier.getSubscription().setTypeSub(TypeSubscription.ANNUAL); // Set the subscription type
 
-        switch (skier.getSubscription().getTypeSub()) {
-            case ANNUAL:
-                skier.getSubscription().setEndDate(skier.getSubscription().getStartDate().plusYears(1));
-                break;
-            case SEMESTRIEL:
-                skier.getSubscription().setEndDate(skier.getSubscription().getStartDate().plusMonths(6));
-                break;
-            case MONTHLY:
-                skier.getSubscription().setEndDate(skier.getSubscription().getStartDate().plusMonths(1));
-                break;
-        }
+        // Call the method
+        skierServices.addSkier(skier);
 
-        return skierRepository.save(skier);
+        // Verify that skierRepository.save is called with the modified skier
+        verify(skierRepository, times(1)).save(skier);
+
+        // Add assertions based on your actual business logic
+        assertNotNull(skier.getSubscription());
+        assertEquals(TypeSubscription.ANNUAL, skier.getSubscription().getTypeSub());
+        assertNotNull(skier.getSubscription().getEndDate());
+
+        // You can add more assertions as needed
+    }
+
+
+
+
+
+    @Test
+    void assignSkierToSubscription() {
+        // Assuming you have Skier and Subscription entities along with repositories
+        Skier skier = new Skier();
+        Subscription subscription = new Subscription();
+        Long numSkier = 1L;
+        Long numSubscription = 2L;
+
+        when(skierRepository.findById(numSkier)).thenReturn(Optional.of(skier));
+        when(subscriptionRepository.findById(numSubscription)).thenReturn(Optional.of(subscription));
+
+        // Call the method
+        skierServices.assignSkierToSubscription(numSkier, numSubscription);
+
+        // Verify that skierRepository.save is called with the modified skier
+        verify(skierRepository, times(1)).save(skier);
+
+        // Add assertions based on your actual business logic
+        assertNotNull(skier.getSubscription());
+        assertEquals(subscription, skier.getSubscription());
     }
 
 
 
     @Test
-    public Skier assignSkierToSubscription(Long numSkier, Long numSubscription) {
-        Skier skier = skierRepository.findById(numSkier).orElse(null);
-        Subscription subscription = subscriptionRepository.findById(numSubscription).orElse(null);
+    void addSkierAndAssignToCourse() {
+        // Create a Skier and a Course for testing
+        Skier skier = new Skier();
+        Course course = new Course();
+        Long courseId = 1L;
 
-        if (skier != null && subscription != null) {
-            skier.setSubscription(subscription);
-            return skierRepository.save(skier);
-        } else {
-            // Handle the case where either skier or subscription is null
-            // You can throw an exception or handle it based on your requirements
-            return null; // or throw new SomeException("Skier or Subscription not found");
-        }
+        when(courseRepository.getById(courseId)).thenReturn(course);
+
+        // Call the method
+        skierServices.addSkierAndAssignToCourse(skier, courseId);
+
+        // Verify that skierRepository.save is called with the modified skier
+        verify(skierRepository, times(1)).save(skier);
+
+        // Add assertions based on your actual business logic
+        assertNotNull(skier.getRegistrations());
+        assertFalse(skier.getRegistrations().isEmpty());
+        assertEquals(course, skier.getRegistrations().iterator().next().getCourse());
     }
 
-    @Test
-    public Skier addSkierAndAssignToCourse(Skier skier, Long courseId) {
-        Course course = courseRepository.getById(courseId); // This line may be causing the NullPointerException
 
-        Set<Registration> registrations = skier.getRegistrations();
-        if (registrations == null) {
-            registrations = new HashSet<>();
-            skier.setRegistrations(registrations);
-        }
-
-        Registration registration = new Registration();
-        registration.setSkier(skier);
-        registration.setCourse(course);
-        registrations.add(registration);
-
-        return skierRepository.save(skier);
-    }
 
 
     @Test //done
-    public void testRemoveSkier() {
+     void testRemoveSkier() {
         skierServices.removeSkier(1L);
 
         verify(skierRepository, times(1)).deleteById(anyLong());
@@ -113,7 +129,7 @@ public class SkierServiceImplTest {
     }
 
     @Test //done
-    public void testRetrieveSkier() {
+     void testRetrieveSkier() {
         when(skierRepository.findById(anyLong())).thenReturn(Optional.of(new Skier()));
 
         Skier result = skierServices.retrieveSkier(1L);
@@ -123,7 +139,7 @@ public class SkierServiceImplTest {
     }
 
     @Test //done
-    public void testAssignSkierToPiste() {
+     void testAssignSkierToPiste() {
         Skier skier = new Skier();
         Piste piste = new Piste();
 
@@ -141,7 +157,7 @@ public class SkierServiceImplTest {
 
 
     @Test//done
-    public void testRetrieveSkiersBySubscriptionType() {
+     void testRetrieveSkiersBySubscriptionType() {
         List<Skier> skierList = new ArrayList<>();
         when(skierRepository.findBySubscription_TypeSub(any(TypeSubscription.class))).thenReturn(skierList);
 

@@ -21,7 +21,7 @@ import lombok.experimental.FieldDefaults;
 public class Course implements Serializable {
 
 	@Id
-	@GeneratedValue(strategy=GenerationType.IDENTITY)
+	//@GeneratedValue(strategy=GenerationType.IDENTITY)
 	Long numCourse;
 	int level;
 	@Enumerated(EnumType.STRING)
@@ -33,6 +33,6 @@ public class Course implements Serializable {
 
 	@JsonIgnore
 	@OneToMany(mappedBy= "course")
-	Set<Registration> registrations;
+	private Set<Registration> registrations;
 
 }

@@ -4,6 +4,7 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
+import tn.esprit.spring.dtos.SkierDTO;
 import tn.esprit.spring.entities.Skier;
 import tn.esprit.spring.entities.TypeSubscription;
 import tn.esprit.spring.services.ISkierServices;
@@ -20,14 +21,17 @@ public class SkierRestController {
 
     @Operation(description = "Add Skier")
     @PostMapping("/add")
-    public Skier addSkier(@RequestBody Skier skier){
+    public Skier addSkier(@RequestBody SkierDTO skierDTO){
+        Skier skier =  new Skier(skierDTO.getNumSkier(),skierDTO.getFirstName(),skierDTO.getLastName(),skierDTO.getDateOfBirth(), skierDTO.getCity(), null,null,null);
         return  skierServices.addSkier(skier);
     }
 
     @Operation(description = "Add Skier And Assign To Course")
     @PostMapping("/addAndAssign/{numCourse}")
-    public Skier addSkierAndAssignToCourse(@RequestBody Skier skier,
+    public Skier addSkierAndAssignToCourse(@RequestBody SkierDTO skierDTO,
                                            @PathVariable("numCourse") Long numCourse){
+        Skier skier =  new Skier(skierDTO.getNumSkier(),skierDTO.getFirstName(),skierDTO.getLastName(),skierDTO.getDateOfBirth(), skierDTO.getCity(), null,null,null);
+
         return  skierServices.addSkierAndAssignToCourse(skier,numCourse);
     }
     @Operation(description = "Assign Skier To Subscription")
