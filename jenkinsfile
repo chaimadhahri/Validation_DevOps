@@ -1,0 +1,74 @@
+pipeline {
+    agent any
+
+    stages {
+        stage("GIT") {
+            steps {
+                echo "Getting project from Git"
+                git url: 'https://github.com/chaimadhahri/Validation_DevOps.git', branch: 'yosr'
+
+
+            }
+        }
+        stage('MVN CLEAN INSTALL') {
+            steps {
+                sh 'mvn clean install'
+            }
+        }
+
+        stage('MOCKITO') {
+            steps {
+                 sh 'mvn test'
+            }
+        }
+
+        stage('SONARQUBE') {
+            steps {
+                sh 'mvn sonar:sonar -Dsonar.login=admin -Dsonar.password=root'
+            }
+        }
+
+        stage('Nexus') {
+            steps {
+                     sh "mvn deploy -DskipTests=true"
+
+                }
+            }
+        stage('Build Docker Image') {
+            steps {
+                echo 'Building the Docker image...'
+             //   sh 'docker-compose -f /Bureau/Station ski/Validation_DevOps/docker-compose.yml build'
+               // sh 'docker build -t SkiG3:tag -f /Bureau/Station ski/Validation_DevOps/Dockerfile'
+                sh 'docker build -t yosrbelaam/ski:1.0.0 .'
+
+
+            }
+        }
+
+        stage('Upload to Docker Hub') {
+            steps {
+                echo 'Logging in to Docker Hub with a token...'
+                sh 'echo dckr_pat_kJL36ZvN-uk0AyPhJxOeQ1K53UU | docker login -u yosrbelaam --password-stdin'
+
+                echo 'Pushing the Docker image to Docker Hub...'
+                sh 'docker push yosrbelaam/ski:1.0.0'
+            }
+        }
+
+
+
+        stage('Run Docker Compose') {
+            steps {
+                echo 'Running Docker Compose...'
+                sh 'docker-compose up -d'
+            }
+        }
+
+        stage('Grafana') {
+             steps {
+                echo 'Running Grafana...'
+
+                    }
+                }
+    }
+}
