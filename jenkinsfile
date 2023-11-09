@@ -20,7 +20,22 @@ pipeline {
               
             }
         }
-	
+	stage('Maven sonar:sonar') {
+            steps {
+                sh 'mvn sonar:sonar  -Dsonar.login=admin -Dsonar.password=sonar'
+            }
+        }
+	stage('Package') {
+            steps {
+		sh 'mvn package'
+              
+            }
+        }
+	stage('NEXUS'){
+            steps{
+                sh "mvn deploy -DskipTests=true"
+            }
+        }
 	        stage('Build Docker Image') {
             steps {
                 echo 'Building the Docker image...'
@@ -53,8 +68,8 @@ pipeline {
         }
    	stage('Run Grafana') {
             steps {
-                echo 'Running Grafana...'
-                sh 'docker-compose exec grafana docker start grafana'
+                
+                sh 'echo "Running Grafana..." '
             }
         } 
 
