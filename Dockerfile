@@ -1,17 +1,4 @@
-version: "3.9"
-
-services:
-  Validation_DevOps:
-    container_name: Validation_DevOps
-    build:
-      context: .
-      dockerfile: Dockerfile
-    ports:
-      - "8089:8089"
-    environment:
-      - spring.datasource.url=jdbc:mysql://localhost:3306/stationSki?createDatabaseIfNotExist=true
-      - spring.datasource.username=root
-      - spring.datasource.password=
-    image: station-ski
-    command: mvn test
-    restart: unless-stopped
+FROM openjdk:8-jdk-alpine
+EXPOSE 8089
+ADD target/gestion-station-ski-1.0.jar gestion-station-ski-1.0.jar
+ENTRYPOINT ["java","-jar", "gestion-station-ski-1.0.jar"]
