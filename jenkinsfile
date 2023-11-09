@@ -70,5 +70,17 @@ pipeline {
 
                     }
                 }
+
     }
+    post {
+            success {
+                echo 'Successful.'
+                emailext to: 'yosr.belaam@esprit.tn', subject: "Pipeline Succeeded: ${currentBuild.fullDisplayName}", body: "${currentBuild.fullDisplayName} has succeeded."
+            }
+            failure {
+                echo 'Failed.'
+                emailext to: 'yosr.belaam@esprit.tn', subject: "Pipeline Failed: ${currentBuild.fullDisplayName}", body: "${currentBuild.fullDisplayName} has failed. Please check the console output.", attachLog: true
+
+            }
+        }
 }
