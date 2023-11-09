@@ -49,7 +49,7 @@ pipeline {
                     sh 'echo dckr_pat_dsg8x3JHiv58CW_eKGa3hoB7dMw | docker login -u karmandi --password-stdin'
 
                     echo 'Pushing the Docker image to Docker Hub...'
-                    sh 'docker push karmandi/skiOuma:1.0.0'
+                    sh 'docker push karmandi/skiouma:1.0.0'
                 }
             }
 
