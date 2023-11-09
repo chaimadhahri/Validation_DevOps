@@ -4,7 +4,7 @@ pipeline {
         stage('GIT') {
             steps {
 		echo "Getting Project from Git"
-                git 'https://github.com/chaimadhahri/Validation_DevOps.git', branch: 'oumaima'
+                git url: 'https://github.com/chaimadhahri/Validation_DevOps.git', branch: 'oumaima'
             }
         }
           stage('Maven clean') {
