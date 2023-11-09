@@ -33,7 +33,7 @@ public class Course implements Serializable {
 
 	@JsonIgnore
 	@OneToMany(mappedBy= "course")
-	Set<Registration> registrations;
+	private Set<Registration> registrations;
 
 	public Course(Long numCourse, int level, TypeCourse typeCourse, Support support, Float price, int timeSlot) {
 		this.numCourse = numCourse;

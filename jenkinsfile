@@ -8,9 +8,14 @@ pipeline {
                 git url: 'https://github.com/chaimadhahri/Validation_DevOps.git', branch: 'chayma'
             }
         }
-        stage('Maven clean install') {
+        stage('Maven clean') {
             steps {
-                sh 'mvn clean install'
+                sh 'mvn clean'
+            }
+        }
+	stage('Maven compile') {
+            steps {
+                sh 'mvn compile'
             }
         }
 
@@ -25,53 +30,7 @@ pipeline {
                 sh 'mvn sonar:sonar  -Dsonar.login=admin -Dsonar.password=sonar'
             }
         }
-	stage('Package') {
-            steps {
-		sh 'mvn package'
-              
-            }
-        }
-	stage('NEXUS'){
-            steps{
-                sh "mvn deploy -DskipTests=true"
-            }
-        }
-	        stage('Build Docker Image') {
-            steps {
-                echo 'Building the Docker image...'
-             //   sh 'docker-compose -f /Bureau/Station ski/Validation_DevOps/docker-compose.yml build'
-               // sh 'docker build -t SkiG3:tag -f /Bureau/Station ski/Validation_DevOps/Dockerfile'
-                sh 'docker build -t chaymadhahri/ski:1.0.0 .'
-       
 
-            }
-        }
-
-        stage('Upload to Docker Hub') {
-            steps {
-                echo 'Logging in to Docker Hub with a token...'
-                sh 'echo dckr_pat_pt4oRkToaQpMPezuhR-KDO1MRy4 | docker login -u chaymadhahri --password-stdin'
-
-                echo 'Pushing the Docker image to Docker Hub...'
-                sh 'docker push chaymadhahri/ski:1.0.0'
-            }
-        }
-       
-
-       
-        stage('Run Docker Compose') {
-            steps {
-                echo 'Running Docker Compose...'
-               // sh 'sudo docker-compose -f /home/vagrant/docker-compose.yml up -d'
-                sh 'docker-compose up -d'
-            }
-        }
-   	stage('Run Grafana') {
-            steps {
-                
-                sh 'echo "Running Grafana..." '
-            }
-        } 
 
     }
 }
