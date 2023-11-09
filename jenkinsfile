@@ -19,7 +19,7 @@ pipeline {
         }
      stage('Maven sonar:sonar') {
             steps {
-                sh 'mvn sonar:sonar  -Dsonar.login=admin -Dsonar.password=admin'
+                sh 'mvn sonar:sonar  -Dsonar.login=admin -Dsonar.password=mimo'
             }
         }
        
