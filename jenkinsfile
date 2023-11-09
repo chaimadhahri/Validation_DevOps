@@ -20,22 +20,7 @@ pipeline {
               
             }
         }
-	stage('Maven sonar:sonar') {
-            steps {
-                sh 'mvn sonar:sonar  -Dsonar.login=admin -Dsonar.password=sonar'
-            }
-        }
-	stage('Package') {
-            steps {
-		sh 'mvn package'
-              
-            }
-        }
-	stage('NEXUS'){
-            steps{
-                sh "mvn deploy -DskipTests=true"
-            }
-        }
+	
 	        stage('Build Docker Image') {
             steps {
                 echo 'Building the Docker image...'
