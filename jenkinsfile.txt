@@ -4,7 +4,7 @@ pipeline {
         stage('GIT') {
             steps {
 		echo "Getting Project from Git"
-                git 'https://github.com/chaimadhahri/Validation_DevOps.git'
+                git 'https://github.com/chaimadhahri/Validation_DevOps.git', branch:'oumaima'
             }
         }
           stage('Maven clean') {
@@ -22,13 +22,6 @@ pipeline {
                 sh 'mvn sonar:sonar  -Dsonar.login=admin -Dsonar.password=sonar'
             }
         }
-        stage('date système') {
-            steps {
-                script {
-                    def currentDate = sh(script: 'date', returnStdout: true).trim()
-                    echo "Date système : ${currentDate}"
-                }
-            }
-        }
+       
     }
 }
