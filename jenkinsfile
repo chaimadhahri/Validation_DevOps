@@ -20,46 +20,19 @@ pipeline {
               
             }
         }
-	stage('SONARQUBE') {
+	
+	stage('Package') {
             steps {
-                sh 'mvn sonar:sonar  -Dsonar.login=admin -Dsonar.password=sonar'
+		sh 'mvn package'
+              
+            }
+	stage('NEXUS'){
+            steps{
+                sh "mvn deploy -DskipTests=true"
             }
         }
 
-	stage('Build Docker Image') {
-            steps {
-                echo 'Building the Docker image...'
-                sh 'docker build -t chaymadhahri/ski:1.0.0 .'
-       
-
-            }
-        }
-
-        stage('Upload to Docker Hub') {
-            steps {
-                echo 'Logging in to Docker Hub with a token...'
-                sh 'echo dckr_pat_pt4oRkToaQpMPezuhR-KDO1MRy4 | docker login -u chaymadhahri --password-stdin'
-
-                echo 'Pushing the Docker image to Docker Hub...'
-                sh 'docker push chaymadhahri/ski:1.0.0'
-            }
-        }
-       
-
-       
-        stage('Run Docker Compose') {
-            steps {
-                echo 'Running Docker Compose...'
-                sh 'docker-compose up -d'
-            }
-        }
-   	stage('Grafana') {
-            steps {
-                
-                sh 'echo "Running Grafana..." '
-            }
-        } 
-
+	
 
     }
 }
