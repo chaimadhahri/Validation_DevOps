@@ -17,17 +17,18 @@ pipeline {
                 sh 'mvn compile'
             }
         }
-     stage('Maven sonar:sonar') {
-            steps {
-                sh 'mvn sonar:sonar  -Dsonar.login=admin -Dsonar.password=mimo'
-            }
-        }
-      stage('Tests') {
+     stage('Tests') {
             steps {
 		sh 'mvn test'
               
             }
         }
+     stage('Maven sonar:sonar') {
+            steps {
+                sh 'mvn sonar:sonar  -Dsonar.login=admin -Dsonar.password=mimo'
+            }
+        }
+      
      stage('NEXUS'){
             steps{
                 sh "mvn deploy -DskipTests=true"
